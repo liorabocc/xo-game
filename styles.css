@@ -50,6 +50,10 @@ body {
     height: 100px;
 }
 
+.cell.disabled {
+    cursor: not-allowed;
+}
+
 #results {
     display: flex;
     justify-content: space-between;
