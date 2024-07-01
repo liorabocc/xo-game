@@ -4,6 +4,7 @@ const modalMessage = document.getElementById("modalMessage");
 const playerWins = document.getElementById("playerWins");
 const computerWins = document.getElementById("computerWins");
 const ties = document.getElementById("ties");
+const resetButton = document.getElementById("resetBtn");
 
 let board = Array(9).fill(null);
 let isPlayerTurn = true;
@@ -102,8 +103,16 @@ function computerMove() {
     }
 };
 
+function handleResetButton() {
+    localStorage.removeItem("GameResults");
+    gameResults = { playerWins: 0, computerWins: 0, ties: 0 };
+    renderResults();
+    resetBoard();
+};
+
 cells.forEach(cell => {
     cell.addEventListener("click", handleClick);
 });
+resetButton.addEventListener("click", handleResetButton);
 
 renderResults();
