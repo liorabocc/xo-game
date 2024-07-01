@@ -1,8 +1,18 @@
 const cells = document.querySelectorAll(".cell");
-let board = Array(9).fill(null);
-let isPlayerTurn = true;
 const modal = document.getElementById("modal");
 const modalMessage = document.getElementById("modalMessage");
+const playerWins = document.getElementById("playerWins");
+const computerWins = document.getElementById("computerWins");
+const ties = document.getElementById("ties");
+
+let board = Array(9).fill(null);
+let isPlayerTurn = true;
+
+let gameResults = JSON.parse(localStorage.getItem("GameResults")) || {
+    playerWins: 0,
+    computerWins: 0,
+    ties: 0,
+};
 
 const winningCombinations = [
     [0, 1, 2],
@@ -35,11 +45,30 @@ function resetBoard() {
     cells.forEach(cell => cell.textContent = "");
 };
 
+function updateResults(winner) {
+    if (winner === "X") {
+        gameResults.playerWins++;
+    } else if (winner === "O") {
+        gameResults.computerWins++;
+    } else if (winner === "Tie") {
+        gameResults.ties++;
+    }
+    localStorage.setItem("GameResults", JSON.stringify(gameResults));
+    renderResults();
+};
+
+function renderResults() {
+    playerWins.textContent = gameResults.playerWins > 0 ? gameResults.playerWins : "";
+    computerWins.textContent = gameResults.computerWins > 0 ? gameResults.computerWins : "";
+    ties.textContent = gameResults.ties > 0 ? gameResults.ties : "";
+};
+
 function handleGameEnd(winner) {
     modalMessage.textContent = winner === "Tie" ? "It's a tie!" : `${winner} wins!`;
     modal.style.display = "flex";
     setTimeout(() => {
         modal.style.display = "none";
+        updateResults(winner);
         resetBoard();
     }, 2000);
 };
@@ -55,9 +84,7 @@ function handleClick(event) {
         }, 500);
     } else {
         isPlayerTurn = false;
-        setTimeout(() => {
-            computerMove();
-        }, 500);
+        setTimeout(computerMove(), 500);
     }
 };
 
@@ -78,3 +105,5 @@ function computerMove() {
 cells.forEach(cell => {
     cell.addEventListener("click", handleClick);
 });
+
+renderResults();
