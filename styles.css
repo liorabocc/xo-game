@@ -71,7 +71,7 @@ h1 {
     cursor: not-allowed;
 }
 
-#results {
+.results {
     display: flex;
     justify-content: space-between;
     align-items: center;
