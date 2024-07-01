@@ -39,11 +39,15 @@ function checkWinner(board) {
 function makeMove(index, mark) {
     board[index] = mark;
     cells[index].textContent = mark;
+    cells[index].classList.add("disabled");
 };
 
 function resetBoard() {
     board.fill(null);
-    cells.forEach(cell => cell.textContent = "");
+    cells.forEach(cell => {
+        cell.textContent = "";
+        cell.classList.remove("disabled");
+    })
 };
 
 function updateResults(winner) {
@@ -85,7 +89,9 @@ function handleClick(event) {
         }, 500);
     } else {
         isPlayerTurn = false;
-        setTimeout(computerMove(), 500);
+        setTimeout(() => {
+            computerMove();
+        }, 500);
     }
 };
 
@@ -110,9 +116,7 @@ function handleResetButton() {
     resetBoard();
 };
 
-cells.forEach(cell => {
-    cell.addEventListener("click", handleClick);
-});
+cells.forEach(cell => cell.addEventListener("click", handleClick));
 resetButton.addEventListener("click", handleResetButton);
 
 renderResults();
